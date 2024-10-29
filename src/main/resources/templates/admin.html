@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <h1>Admin, welcome spring boot security page!</h1>
+    <br>
+    <a th:href="@{/logout}">Выйти</a>
+
+
+</head>
+<body>
+<h1>User list</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+            <form action="/admin/update" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${user.id}"/>
+                <input type="text" name="name" th:value="${user.username}"/>
+                <input type="text" name="email" th:value="${user.email}"/>
+                <button type="submit">Update</button>
+            </form>
+            <form action="/admin/delete" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${user.id}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Add User</h2>
+<form action="/admin/add" method="post">
+    <input type="text" name="username" placeholder="Name" required/>
+    <input type="email" name="email" placeholder="Email" required/>
+    <input type="password" name="password" placeholder="password" required>
+    <button type="submit">Add</button>
+</form>
+</body>
+</html>
+</html>
