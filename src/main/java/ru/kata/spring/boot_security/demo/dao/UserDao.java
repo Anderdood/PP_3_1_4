@@ -15,6 +15,7 @@ public interface UserDao {
     public User findById(Long Id);
 
     public List<User> getAllUsers();
+
     User findByUsernameWithRoles(String username);
 
 }

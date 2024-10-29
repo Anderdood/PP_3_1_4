@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name="roles")
+@Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role implements GrantedAuthority {
@@ -27,6 +27,7 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(id);

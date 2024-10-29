@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
         user.setPassword("{noop}" + password);
         user.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
-            userDao.save(user);
-        }
+        userDao.save(user);
+    }
 
-        @Transactional
+    @Transactional
     @Override
     public void update(Long id, String name, String email, String password) {
         User user = findById(id);

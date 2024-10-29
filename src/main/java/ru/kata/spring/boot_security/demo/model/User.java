@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -65,8 +65,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 
 
 }
