@@ -23,16 +23,17 @@
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
+        <td th:text="${user.password}"></td>
+
         <td>
             <form action="/admin/update" method="post" style="display:inline;">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="hidden" name="id" th:value="${user.id}"/>
-                <input type="text" name="name" th:value="${user.username}"/>
+                <input type="text" name="username" th:value="${user.username}"/>
                 <input type="text" name="email" th:value="${user.email}"/>
+                <input type="text" name="password" th:value="${user.password}"/>
                 <button type="submit">Update</button>
             </form>
             <form action="/admin/delete" method="post" style="display:inline;">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <input type="hidden" name="id" th:value="${user.id}"/>
                 <button type="submit">Delete</button>
             </form>
@@ -43,7 +44,6 @@
 
 <h2>Add User</h2>
 <form action="/admin/add" method="post">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="text" name="username" placeholder="Name" required/>
     <input type="email" name="email" placeholder="Email" required/>
     <input type="password" name="password" placeholder="password" required>

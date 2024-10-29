@@ -24,14 +24,14 @@ public class AdminController {
     }
 
     @PostMapping("/add")
-    public String addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-        userService.save(name, email, password);
+    public String addUser(@RequestParam String username, @RequestParam String email, @RequestParam String password) {
+        userService.save(username, email, password);
         return "redirect:/admin";
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam Long id, @RequestParam String name, @RequestParam String email) {
-        userService.update(id, name, email);
+    public String updateUser(@RequestParam Long id, @RequestParam String username, @RequestParam String email, @RequestParam String password) {
+        userService.update(id, username, email, password);
         return "redirect:/admin";
     }
 

@@ -52,18 +52,19 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(name);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword("{noop}" + password);
         user.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
-        userDao.save(user);
-    }
+            userDao.save(user);
+        }
 
-    @Transactional
+        @Transactional
     @Override
-    public void update(Long id, String name, String email) {
+    public void update(Long id, String name, String email, String password) {
         User user = findById(id);
         if (user != null) {
             user.setUsername(name);
             user.setEmail(email);
+            user.setPassword(password);
             userDao.update(user);
         }
     }
