@@ -23,19 +23,19 @@ public class AdminController {
         return "admin";
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/add")
     public String addUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
         userService.save(name, email, password);
         return "redirect:/admin";
     }
 
-    @PostMapping("/admin/update")
+    @PostMapping("/update")
     public String updateUser(@RequestParam Long id, @RequestParam String name, @RequestParam String email) {
         userService.update(id, name, email);
         return "redirect:/admin";
     }
 
-    @PostMapping("/admin/delete")
+    @PostMapping("/delete")
     public String deleteUser(@RequestParam Long id) {
         userService.delete(id);
         return "redirect:/admin";
