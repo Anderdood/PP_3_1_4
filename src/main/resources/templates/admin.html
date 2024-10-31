@@ -2,13 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <h1>Admin, welcome spring boot security page!</h1>
-    <br>
-    <a th:href="@{/logout}">Выйти</a>
+    <title>Admin Page</title>
 </head>
 <body>
+<h1>Admin, welcome to the Spring Boot security page!</h1>
+<br>
+<a th:href="@{/logout}">Logout</a>
+
 <h1>User list</h1>
+
+<form action="/admin/find" method="post">
+    <input type="number" name="id" placeholder="Enter User ID" required/>
+    <button type="submit">Find User</button>
+</form>
+
+<div th:if="${foundUser != null}">
+    <h2>Found User</h2>
+    <p>ID: <span th:text="${foundUser.id}"></span></p>
+    <p>Username: <span th:text="${foundUser.username}"></span></p>
+    <p>Email: <span th:text="${foundUser.email}"></span></p>
+</div>
+<br>
 <table>
     <thead>
     <tr>
@@ -23,8 +37,6 @@
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
-        <td th:text="${user.password}"></td>
-
         <td>
             <form action="/admin/update" method="post" style="display:inline;">
                 <input type="hidden" name="id" th:value="${user.id}"/>
@@ -43,11 +55,11 @@
 </table>
 
 <h2>Add User</h2>
-<form action="/admin/add" method="post">
-    <input type="text" name="username" placeholder="Name" required/>
-    <input type="email" name="email" placeholder="Email" required/>
-    <input type="password" name="password" placeholder="password" required>
-    <button type="submit">Add</button>
+<form action="/admin/add" method="post" th:object="${user}">
+    <input type="text" th:field="*{username}" placeholder="Username" required/>
+    <input type="email" th:field="*{email}" placeholder="Email" required/>
+    <input type="password" th:field="*{password}" placeholder="Password" required/>
+    <button type="submit">Add User</button>
 </form>
 </body>
 </html>

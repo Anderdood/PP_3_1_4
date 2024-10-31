@@ -3,10 +3,8 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
@@ -22,18 +20,19 @@ public class AdminController {
     @GetMapping()
     public String listUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("user", new User());
         return "admin";
     }
 
     @PostMapping("/add")
-    public String addUser(@RequestParam String username, @RequestParam String email, @RequestParam String password) {
-        userService.save(username, email, password);
+    public String addUser(@ModelAttribute("user") User user) {
+        userService.save(user.getUsername(), user.getEmail(), user.getPassword());
         return "redirect:/admin";
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam Long id, @RequestParam String username, @RequestParam String email, @RequestParam String password) {
-        userService.update(id, username, email, password);
+    public String updateUser(@ModelAttribute("user") User user) {
+        userService.update(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
         return "redirect:/admin";
     }
 
@@ -41,6 +40,16 @@ public class AdminController {
     public String deleteUser(@RequestParam Long id) {
         userService.delete(id);
         return "redirect:/admin";
+    }
+
+    @PostMapping("/find")
+    public String findUserById(@RequestParam Long id, Model model) {
+        User user = userService.findById(id);
+        model.addAttribute("users", userService.getAllUsers());// надо чтобы список отображался и дальше
+        // (можно и без users если нам нужен только конкретный юзер)
+        model.addAttribute("foundUser", user);
+        model.addAttribute("user", new User());
+        return "admin";
     }
 }
 
