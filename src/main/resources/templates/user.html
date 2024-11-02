@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>User Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Добро пожаловать, <span th:text="${user.username}">User</span>!</h1>
-<p>Email: <span th:text="${user.email}"></span></p>
-<p>password: <span th:text="${user.password}"></span></p>
-
-<a th:href="@{/logout}">Выйти</a>
+<div class="container">
+    <h1 class="mt-5">Добро пожаловать, <span th:text="${user.username}">User</span>!</h1>
+    <p>Email: <span th:text="${user.email}"></span></p>
+    <p>Password: <span th:text="${user.password}"></span></p>
+    <a th:href="@{/logout}" class="btn btn-danger">Выйти</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
