@@ -11,15 +11,15 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
     public List<User> getAllUsers();
 
-    public User findById(Long id);
+    public User findUserById(Long id);
 
-    User findByName(String username);
+    User findUserByName (String username);
 
-    public void delete(Long id);
+    public void deleteUser(Long id);
 
-    void save(String name, String email, String password);
+    void saveUser(String name, String email, String password);
 
-    void update(Long id, String name, String email, String password);
+    void updateUser(Long id, String name, String email, String password);
 
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;

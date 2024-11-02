@@ -38,53 +38,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User findById(Long id) {
-        return userDao.findById(id);
+    public User findUserById(Long id) {
+        return userDao.findUserById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public User findByName(String username) {
-        return userDao.findByName(username);
+    public User findUserByName (String username) {
+        return userDao.findUserByName(username);
     }
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        userDao.delete(id);
+    public void deleteUser(Long id) {
+        userDao.deleteUser(id);
     }
 
     @Override
     @Transactional
-    public void save(String name, String email, String password) {
+    public void saveUser(String name, String email, String password) {
         User user = new User();
         user.setUsername(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         if (name.equals("admin")) {
-            user.setRoles(Set.of(roleRepository.findByName("ROLE_ADMIN")));
+            user.setRoles(Set.of(roleRepository.findRoleByName("ROLE_ADMIN")));
         } else {
-            user.setRoles(Set.of(roleRepository.findByName("ROLE_USER")));
+            user.setRoles(Set.of(roleRepository.findRoleByName("ROLE_USER")));
         }
-        userDao.save(user);
+        userDao.saveUser(user);
     }
 
     @Override
     @Transactional
-    public void update(Long id, String name, String email, String password) {
-        User user = findById(id);
+    public void updateUser(Long id, String name, String email, String password) {
+        User user = findUserById(id);
         if (user != null) {
             user.setUsername(name);
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
-            userDao.update(user);
+            userDao.updateUser(user);
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findByUsernameWithRoles(username);
+        User user = userDao.findUserWithRolesByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

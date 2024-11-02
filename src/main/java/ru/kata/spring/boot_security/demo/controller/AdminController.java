@@ -26,25 +26,25 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(@ModelAttribute("user") User user) {
-        userService.save(user.getUsername(), user.getEmail(), user.getPassword());
+        userService.saveUser(user.getUsername(), user.getEmail(), user.getPassword());
         return "redirect:/admin";
     }
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user) {
-        userService.update(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
+        userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
         return "redirect:/admin";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 
     @PostMapping("/find")
     public String findUserById(@RequestParam Long id, Model model) {
-        User user = userService.findById(id);
+        User user = userService.findUserById(id);
         model.addAttribute("users", userService.getAllUsers());// надо чтобы список отображался и дальше
         // (можно и без users если нам нужен только конкретный юзер)
         model.addAttribute("foundUser", user);

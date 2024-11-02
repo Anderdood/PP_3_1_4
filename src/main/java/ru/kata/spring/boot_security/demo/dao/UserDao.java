@@ -6,18 +6,18 @@ import ru.kata.spring.boot_security.demo.model.User;
 import java.util.List;
 
 public interface UserDao {
-    public void save(User user);
+    public void saveUser(User user);
 
-    public void delete(Long id);
+    public void deleteUser(Long id);
 
-    public void update(User user);
+    public void updateUser(User user);
 
-    public User findById(Long Id);
+    public User findUserById(Long Id);
 
-    User findByName(String username);
+    User findUserByName(String username);
 
     public List<User> getAllUsers();
 
-    User findByUsernameWithRoles(String username);
+    User findUserWithRolesByUsername(String username);
 
 }
