@@ -7,6 +7,8 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class Init {
@@ -38,7 +40,10 @@ public class Init {
             userService.saveUser("admin", "admin@example.com", "1");
         }
         if (userService.findUserByName("user") == null) {
-            userService.saveUser("user", "user@example.com", "1");
+            Set<Role> roles = new HashSet<>();
+            Role role = roleRepository.findRoleByName("ROLE_USER");
+            roles.add(role);
+            userService.saveUser("user", "user@example.com", "1", roles);
         }
     }
 

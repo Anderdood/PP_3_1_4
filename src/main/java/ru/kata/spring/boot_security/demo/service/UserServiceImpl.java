@@ -58,18 +58,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public void saveUser(String name, String email, String password, Set<Role> roles) {
+        User user = new User();
+        user.setUsername(name);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRoles(roles);
+        userDao.saveUser(user);
+    }
+    @Override
+    @Transactional
     public void saveUser(String name, String email, String password) {
         User user = new User();
         user.setUsername(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        Set<Role> roles = new HashSet<>();
-
+        Set<Role> roles=new HashSet<>();
         if (name.equals("admin")) {
-            roles.add(roleRepository.findRoleByName("ROLE_USER"));
             roles.add(roleRepository.findRoleByName("ROLE_ADMIN"));
-        } else {
-            roles.add(roleRepository.findRoleByName("ROLE_USER"));
         }
         user.setRoles(roles);
         userDao.saveUser(user);
@@ -96,5 +102,10 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found");
         }
         return user;
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Role> getAllRoles() {
+        return roleRepository.getAllRoles();
     }
 }

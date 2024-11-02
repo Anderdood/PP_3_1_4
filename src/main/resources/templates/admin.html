@@ -10,20 +10,25 @@
             color: white;
             padding: 10px;
         }
+
         .header .logout {
             color: gray;
             float: right;
         }
+
         .tab-content {
             display: none; /* Скрываем все вкладки по умолчанию */
         }
+
         #tab1:checked ~ .tab-content.tab1,
         #tab2:checked ~ .tab-content.tab2 {
             display: block; /* Показываем только активную вкладку */
         }
+
         .tabs {
             margin-top: 20px;
         }
+
         .tab-label {
             cursor: pointer;
             padding: 10px;
@@ -32,9 +37,11 @@
             border-radius: 5px;
             background-color: #f8f9fa;
         }
+
         .tab-label:hover {
             background-color: #e9ecef;
         }
+
         #tab1:checked + label[for="tab1"],
         #tab2:checked + label[for="tab2"] {
             background-color: #007bff;
@@ -80,6 +87,8 @@
                         <p>ID: <span th:text="${foundUser.id}"></span></p>
                         <p>Username: <span th:text="${foundUser.username}"></span></p>
                         <p>Email: <span th:text="${foundUser.email}"></span></p>
+                        <p>Roles: <span th:each="role : ${foundUser.roles}" th:text="${role.name} + ' '"></span></p>
+
                     </div>
                     <br>
                     <table class="table">
@@ -96,6 +105,9 @@
                             <td th:text="${user.id}"></td>
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.email}"></td>
+                            <td>
+                                <span th:each="role : ${user.roles}" th:text="${role.name} + ' '"></span>
+                            </td>
                             <td>
                                 <form action="/admin/update" method="post" style="display:inline;">
                                     <input type="hidden" name="id" th:value="${user.id}"/>
@@ -120,9 +132,17 @@
                         <input type="text" th:field="*{username}" placeholder="Username" required/>
                         <input type="email" th:field="*{email}" placeholder="Email" required/>
                         <input type="password" th:field="*{password}" placeholder="Password" required/>
+                        <label>Roles:</label>
+                        <select th:field="*{roleNames}" multiple>
+                            <option th:each="role : ${allRoles}" th:value="${role.name}"
+                                    th:text="${role.name}"></option>
+                        </select>
+
                         <button type="submit">Add User</button>
                     </form>
                 </div>
+
+
             </div>
         </div>
     </div>
