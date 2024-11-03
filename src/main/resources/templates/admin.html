@@ -1,94 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Page</title>
+    <!-- Указание, что документ написан в стандарте HTML5 -->
+    <meta charset="UTF-8"> <!-- Устанавливает кодировку страницы как UTF-8 для поддержки различных языков -->
+    <title>Admin Page</title> <!-- Заголовок страницы, который отображается на вкладке браузера -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Подключение Bootstrap для использования стилей и компонентов интерфейса -->
     <style>
         .header {
-            background-color: black; /* Цвет фона шапки */
-            color: white; /* Цвет текста шапки */
-            padding: 10px; /* Отступы внутри шапки */
+            background-color: black; /* Устанавливает чёрный цвет фона для шапки страницы */
+            color: white; /* Устанавливает белый цвет текста для элементов внутри шапки */
+            padding: 10px; /* Задаёт внутренний отступ для шапки */
         }
 
         .header .logout {
-            color: gray; /* Цвет текста для кнопки выхода */
-            float: right; /* Выравнивание кнопки выхода вправо */
+            color: gray; /* Устанавливает серый цвет текста для кнопки выхода */
+            float: right; /* Прижимает кнопку выхода к правому краю */
         }
     </style>
 </head>
 <body>
 <div class="header">
-    <span th:text="'Email: ' + ${currentUser.email} + ' with roles: ' + ${currentUser.roles}"></span>
-    <a class="logout" th:href="@{/logout}">Logout</a>
+    <!-- Отображение email текущего пользователя с использованием Thymeleaf -->
+    <span th:text="'Email: ' + ${currentUser.email}"></span>
+    <span th:text="' with roles: '"></span> <!-- Статический текст "with roles:" для отображения перед списком ролей -->
+    <span th:each="role : ${currentUser.roles}">
+        <!-- Перебираем роли пользователя и отображаем название каждой роли, начиная с 5-го символа (для удаления префикса "ROLE_") -->
+        <span th:text="${#strings.substring(role.name, 5)}"></span>
+    </span>
+    <a class="logout" th:href="@{/logout}">Logout</a> <!-- Ссылка на выход из системы -->
 </div>
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <h2>Navigation</h2>
+            <h2>Navigation</h2> <!-- Заголовок навигационного меню -->
             <ul class="list-group">
-                <!-- Проверка на наличие роли "ADMIN" -->
+                <!-- Проверка наличия роли ADMIN у пользователя -->
                 <li class="list-group-item" th:if="${@adminController.hasRole(currentUser, 'ROLE_ADMIN')}">
-                    <a href="http://localhost:8080/admin">Admin Page</a>
+                    <a href="http://localhost:8080/admin">Admin Page</a> <!-- Ссылка на страницу администратора -->
                 </li>
-                <!-- Проверка на наличие роли "USER" -->
+                <!-- Проверка наличия роли USER у пользователя -->
                 <li class="list-group-item" th:if="${@adminController.hasRole(currentUser, 'ROLE_USER')}">
-                    <a href="http://localhost:8080/user">User Page</a>
+                    <a href="http://localhost:8080/user">User Page</a> <!-- Ссылка на страницу пользователя -->
                 </li>
             </ul>
         </div>
 
         <div class="col-md-9">
-            <h1>Admin, welcome to the Spring Boot security page!</h1>
+            <h1>Admin panel</h1> <!-- Заголовок основной части панели администратора -->
             <br>
 
-            <!-- Вкладки -->
+            <!-- Вкладки навигации -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link active" id="userListTab" data-toggle="tab" href="#userList">User List</a>
+                    <!-- Вкладка для просмотра списка пользователей -->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="addUserTab" data-toggle="tab" href="#addUser">Add User</a>
+                    <!-- Вкладка для добавления нового пользователя -->
                 </li>
             </ul>
 
             <div class="tab-content mt-3">
                 <div class="tab-pane fade show active" id="userList">
-                    <h1>User list</h1>
+                    <h1>User list</h1> <!-- Заголовок раздела списка пользователей -->
                     <form action="/admin/find" method="post">
+                        <!-- Поле для поиска пользователя по ID -->
                         <input type="number" name="id" placeholder="Enter User ID" required/>
                         <button type="submit" class="btn btn-primary">Find User</button>
                     </form>
 
                     <div th:if="${foundUser != null}">
+                        <!-- Блок, отображаемый только если найденный пользователь не пуст -->
                         <h2>Found User</h2>
-                        <p>ID: <span th:text="${foundUser.id}"></span></p>
-                        <p>Username: <span th:text="${foundUser.username}"></span></p>
-                        <p>Email: <span th:text="${foundUser.email}"></span></p>
+                        <p>ID: <span th:text="${foundUser.id}"></span></p> <!-- Вывод ID пользователя -->
+                        <p>Username: <span th:text="${foundUser.username}"></span></p> <!-- Вывод имени пользователя -->
+                        <p>Email: <span th:text="${foundUser.email}"></span></p> <!-- Вывод email пользователя -->
                         <p>Roles: <span th:each="role : ${foundUser.roles}" th:text="${role.name} + ' '"></span></p>
+                        <!-- Вывод ролей пользователя -->
                     </div>
                     <br>
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Roles</th>
-                            <th>Action</th>
+                            <th>ID</th> <!-- Заголовок столбца ID -->
+                            <th>Name</th> <!-- Заголовок столбца имени пользователя -->
+                            <th>Email</th> <!-- Заголовок столбца email пользователя -->
+                            <th>Roles</th> <!-- Заголовок столбца ролей пользователя -->
+                            <th>Update</th> <!-- Заголовок столбца для кнопок обновления -->
+                            <th>Delete</th> <!-- Заголовок столбца для кнопок удаления -->
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="user : ${users}">
-                            <td th:text="${user.id}"></td>
-                            <td th:text="${user.username}"></td>
-                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.id}"></td> <!-- Вывод ID пользователя -->
+                            <td th:text="${user.username}"></td> <!-- Вывод имени пользователя -->
+                            <td th:text="${user.email}"></td> <!-- Вывод email пользователя -->
                             <td>
-                                <span th:each="role : ${user.roles}" th:text="${role.name} + ' '"></span>
+                                <!-- Вывод ролей текущего пользователя -->
+                                <span th:each="role : ${currentUser.roles}">
+                                    <span th:text="${#strings.substring(role.name, 5)}"></span>
+                                </span>
                             </td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#updateModal" th:data-id="${user.id}" th:data-username="${user.username}" th:data-email="${user.email}" th:data-password="${user.password}">Update</button>
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" th:data-id="${user.id}">Delete</button>
+                                <!-- Кнопка открытия модального окна для обновления пользователя -->
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#updateModal"
+                                        th:data-id="${user.id}" th:data-username="${user.username}"
+                                        th:data-email="${user.email}" th:data-password="${user.password}">Update
+                                </button>
+                            </td>
+                            <td>
+                                <!-- Кнопка открытия модального окна для удаления пользователя -->
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+                                        th:data-id="${user.id}" th:data-username="${user.username}"
+                                        th:data-email="${user.email}">Delete
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -96,16 +123,30 @@
                 </div>
 
                 <div class="tab-pane fade" id="addUser">
-                    <h2>Add User</h2>
+                    <h2>Add User</h2> <!-- Заголовок формы добавления пользователя -->
                     <form action="/admin/add" method="post" th:object="${user}">
-                        <input type="text" th:field="*{username}" placeholder="Username" required/>
-                        <input type="email" th:field="*{email}" placeholder="Email" required/>
-                        <input type="password" th:field="*{password}" placeholder="Password" required/>
-                        <label>Roles:</label>
-                        <select th:field="*{roleNames}" multiple>
-                            <option th:each="role : ${allRoles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        <div class="form-group">
+                            <!-- Поле для ввода имени пользователя -->
+                            <input type="text" th:field="*{username}" class="form-control" placeholder="Username"
+                                   required/>
+                        </div>
+                        <div class="form-group">
+                            <!-- Поле для ввода email пользователя -->
+                            <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required/>
+                        </div>
+                        <div class="form-group">
+                            <!-- Поле для ввода пароля пользователя -->
+                            <input type="password" th:field="*{password}" class="form-control" placeholder="Password"
+                                   required/>
+                        </div>
+                        <label>Roles:</label> <!-- Метка для поля выбора ролей -->
+                        <select th:field="*{roleNames}" class="form-control" multiple>
+                            <!-- Перечень всех ролей, доступных для выбора -->
+                            <option th:each="role : ${allRoles}" th:value="${role.name}"
+                                    th:text="${role.name}"></option>
                         </select>
-                        <button type="submit" class="btn btn-primary">Add User</button>
+                        <button type="submit" class="btn btn-primary mt-2">Add User</button>
+                        <!-- Кнопка добавления пользователя -->
                     </form>
                 </div>
             </div>
@@ -114,17 +155,20 @@
 </div>
 
 <!-- Модальное окно для обновления пользователя -->
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateModalLabel">Update User</h5>
+                <!-- Заголовок модального окна обновления пользователя -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span> <!-- Кнопка для закрытия модального окна -->
                 </button>
             </div>
             <div class="modal-body">
                 <form id="updateForm" action="/admin/update" method="post">
+                    <!-- Скрытое поле для передачи ID пользователя -->
                     <input type="hidden" name="id" id="updateUserId"/>
                     <div class="form-group">
                         <label for="updateUsername">Username</label>
@@ -136,9 +180,10 @@
                     </div>
                     <div class="form-group">
                         <label for="updatePassword">Password</label>
-                        <input type="password" class="form-control" id="updatePassword" name="password" required/>
+                        <input type="password" class="form-control" id="updatePassword" name="password"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update User</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <!-- Кнопка сохранения изменений -->
                 </form>
             </div>
         </div>
@@ -146,52 +191,55 @@
 </div>
 
 <!-- Модальное окно для удаления пользователя -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+                <!-- Заголовок модального окна удаления пользователя -->
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span> <!-- Кнопка для закрытия модального окна -->
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete this user?</p>
+                <p>Are you sure you want to delete this user?</p> <!-- Подтверждение удаления пользователя -->
                 <form id="deleteForm" action="/admin/delete" method="post">
                     <input type="hidden" name="id" id="deleteUserId"/>
-                    <button type="submit" class="btn btn-danger">Delete User</button>
+                    <!-- Скрытое поле для передачи ID пользователя -->
+                    <button type="submit" class="btn btn-danger">Delete</button> <!-- Кнопка подтверждения удаления -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <!-- Кнопка отмены удаления -->
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script><!-- Подключение библиотеки jQuery для работы с DOM -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script><!-- Подключение Popper.js для работы с всплывающими подсказками и модальными окнами -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script><!-- Скрипт для заполнения полей модального окна обновления данными выбранного пользователя -->
 <script>
-    // Заполнение полей модального окна обновления
     $('#updateModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Кнопка, которая открыла модальное окно
-        var userId = button.data('id');
-        var username = button.data('username');
-        var email = button.data('email');
-        var password = button.data('password');
+        const button = $(event.relatedTarget); // Кнопка, вызвавшая модальное окно
+        const userId = button.data('id'); // Получение ID пользователя
+        const username = button.data('username'); // Получение имени пользователя
+        const email = button.data('email'); // Получение email пользователя
+        const password = button.data('password'); // Получение пароля пользователя
 
-        var modal = $(this);
-        modal.find('#updateUserId').val(userId);
-        modal.find('#updateUsername').val(username);
-        modal.find('#updateEmail').val(email);
-        modal.find('#updatePassword').val(password);
+        const modal = $(this);
+        modal.find('#updateUserId').val(userId); // Заполнение поля ID
+        modal.find('#updateUsername').val(username); // Заполнение поля имени
+        modal.find('#updateEmail').val(email); // Заполнение поля email
+        modal.find('#updatePassword').val(password); // Заполнение поля пароля
     });
 
-    // Заполнение поля модального окна удаления
+    // Скрипт для передачи ID пользователя в модальное окно удаления
     $('#deleteModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Кнопка, которая открыла модальное окно
-        var userId = button.data('id');
+        const button = $(event.relatedTarget); // Кнопка, вызвавшая модальное окно
+        const userId = button.data('id'); // Получение ID пользователя
 
-        var modal = $(this);
-        modal.find('#deleteUserId').val(userId);
+        const modal = $(this);
+        modal.find('#deleteUserId').val(userId); // Заполнение скрытого поля ID
     });
 </script>
 </body>
