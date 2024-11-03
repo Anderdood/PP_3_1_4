@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,15 @@ public class UserController {
     }
 
     @GetMapping
-    public String userHome(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
+    public String userHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = userService.findUserByName(userDetails.getUsername());
+        model.addAttribute("currentUser", currentUser);
         return "user";
+    }
+
+    // Метод для проверки наличия роли
+    public boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getAuthority().equals(roleName));
     }
 }

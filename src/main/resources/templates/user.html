@@ -4,13 +4,65 @@
     <meta charset="UTF-8">
     <title>User Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .header {
+            background-color: black; /* Цвет фона шапки */
+            color: white; /* Цвет текста шапки */
+            padding: 10px; /* Отступы внутри шапки */
+        }
+
+        .header .logout {
+            color: gray; /* Цвет текста для кнопки выхода */
+            float: right; /* Выравнивание кнопки выхода вправо */
+        }
+    </style>
 </head>
 <body>
+<div class="header">
+    <span th:text="'Email: ' + ${currentUser.email} + ' with roles: ' + ${currentUser.roles}"></span>
+    <a class="logout" th:href="@{/logout}">Logout</a>
+</div>
 <div class="container">
-    <h1 class="mt-5">Добро пожаловать, <span th:text="${user.username}">User</span>!</h1>
-    <p>Email: <span th:text="${user.email}"></span></p>
-    <p>Password: <span th:text="${user.password}"></span></p>
-    <a th:href="@{/logout}" class="btn btn-danger">Выйти</a>
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Navigation</h2>
+            <ul class="list-group">
+                <!-- Проверка на наличие роли "ADMIN" -->
+                <li class="list-group-item" th:if="${@userController.hasRole(currentUser, 'ROLE_ADMIN')}">
+                    <a href="http://localhost:8080/admin">Admin Page</a>
+                </li>
+                <!-- Проверка на наличие роли "USER" -->
+                <li class="list-group-item" th:if="${@userController.hasRole(currentUser, 'ROLE_USER')}">
+                    <a href="http://localhost:8080/user">User Page</a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="col-md-9">
+            <h1>Добро пожаловать, <span th:text="${currentUser.username}">User</span>!</h1>
+            <table class="table mt-3">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Email</th>
+                    <th>Роли</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${currentUser.id}"></td>
+                    <td th:text="${currentUser.username}"></td>
+                    <td th:text="${currentUser.email}"></td>
+                    <td>
+                        <span th:each="role : ${currentUser.roles}" th:text="${role.name} + ' '"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

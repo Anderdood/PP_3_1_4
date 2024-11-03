@@ -74,7 +74,16 @@ public class AdminController {
         // (можно и без users если нам нужен только конкретный юзер)
         model.addAttribute("foundUser", user);
         model.addAttribute("user", new User());
+        model.addAttribute("allRoles", userService.getAllRoles());// нужно для отображения списка ролей при добавлении пользователя
         return "admin";
     }
+
+    // Метод для проверки наличия роли
+    public boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getAuthority().equals(roleName));
+    }
+
+
 }
 
