@@ -10,17 +10,41 @@
             color: white;
             padding: 10px;
         }
-
         .header .logout {
             color: gray;
             float: right;
         }
 
+        /* Скрываем радиокнопки */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Стилизация меток как вкладок */
+        .nav-tabs .nav-item label {
+            cursor: pointer;
+            padding: 10px 15px;
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            background-color: #f8f9fa;
+        }
+
+        /* Активное состояние вкладок */
+        input#tab1:checked ~ .nav-tabs .nav-item label[for="tab1"],
+        input#tab2:checked ~ .nav-tabs .nav-item label[for="tab2"] {
+            color: #495057;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+
+        /* Скрываем неактивное содержимое */
         .tab-content > div {
             display: none;
         }
 
-        /* Показываем активную вкладку, когда соответствующий радиобаттон выбран */
+        /* Показываем активное содержимое */
         #tab1:checked ~ .tab-content #userList,
         #tab2:checked ~ .tab-content #addUser {
             display: block;
@@ -58,15 +82,18 @@
     </span>
     <a class="logout" th:href="@{/logout}">Logout</a>
 </div>
+
 <div class="container">
     <div class="row">
         <div class="col-md-3">
             <h2>Navigation</h2>
             <ul class="list-group">
-                <li class="list-group-item" th:if="${@adminController.hasRole(currentUser, 'ROLE_ADMIN')}">
+                <li class="list-group-item" th:each="role : ${currentUser.getAuthorities()}"
+                    th:if="${role.authority == 'ROLE_ADMIN'}">
                     <a href="http://localhost:8080/admin">Admin Page</a>
                 </li>
-                <li class="list-group-item" th:if="${@adminController.hasRole(currentUser, 'ROLE_USER')}">
+                <li class="list-group-item" th:each="role : ${currentUser.getAuthorities()}"
+                    th:if="${role.authority == 'ROLE_ADMIN'}">
                     <a href="http://localhost:8080/user">User Page</a>
                 </li>
             </ul>
@@ -76,11 +103,19 @@
             <h1>Admin panel</h1>
             <br>
 
-            <!-- Радиокнопки для переключения между вкладками -->
+            <!-- Радиокнопки для управления состоянием вкладок -->
             <input type="radio" name="tabs" id="tab1" checked>
-            <label for="tab1">User List</label>
             <input type="radio" name="tabs" id="tab2">
-            <label for="tab2">Add User</label>
+
+            <!-- Стилизованные вкладки -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <label for="tab1" class="nav-link">User List</label>
+                </li>
+                <li class="nav-item">
+                    <label for="tab2" class="nav-link">Add User</label>
+                </li>
+            </ul>
 
             <div class="tab-content mt-3">
                 <!-- Список пользователей -->
