@@ -5,38 +5,9 @@
     <title>Admin Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .header {
-            background-color: black;
-            color: white;
-            padding: 10px;
-        }
-        .header .logout {
-            color: gray;
-            float: right;
-        }
-
         /* Скрываем радиокнопки */
         input[type="radio"] {
             display: none;
-        }
-
-        /* Стилизация меток как вкладок */
-        .nav-tabs .nav-item label {
-            cursor: pointer;
-            padding: 10px 15px;
-            color: #007bff;
-            border: 1px solid #dee2e6;
-            border-top-left-radius: .25rem;
-            border-top-right-radius: .25rem;
-            background-color: #f8f9fa;
-        }
-
-        /* Активное состояние вкладок */
-        input#tab1:checked ~ .nav-tabs .nav-item label[for="tab1"],
-        input#tab2:checked ~ .nav-tabs .nav-item label[for="tab2"] {
-            color: #495057;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
         }
 
         /* Скрываем неактивное содержимое */
@@ -71,19 +42,20 @@
         .modal:target {
             display: block;
         }
+
     </style>
 </head>
 <body>
-<div class="header">
+<div class="header bg-dark text-white p-2">
     <span th:text="'Email: ' + ${currentUser.email}"></span>
     <span th:text="' with roles: '"></span>
     <span th:each="role : ${currentUser.roles}">
         <span th:text="${#strings.substring(role.name, 5)}"></span>
     </span>
-    <a class="logout" th:href="@{/logout}">Logout</a>
+    <a class="logout text-gray float-right" th:href="@{/logout}">Logout</a>
 </div>
 
-<div class="container">
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-3">
             <h2>Navigation</h2>
@@ -121,8 +93,8 @@
                 <!-- Список пользователей -->
                 <div id="userList">
                     <h1>User list</h1>
-                    <form action="/admin/find" method="post">
-                        <input type="number" name="id" placeholder="Enter User ID" required/>
+                    <form action="/admin/find" method="post" class="form-inline">
+                        <input type="number" name="id" class="form-control mr-2" placeholder="Enter User ID" required/>
                         <button type="submit" class="btn btn-primary">Find User</button>
                     </form>
 
@@ -171,26 +143,26 @@
                     <h2>Add User</h2>
                     <form action="/admin/add" method="post" th:object="${user}">
                         <div class="form-group">
-                            <input type="text" th:field="*{username}" class="form-control" placeholder="Username" required/>
+                            <input type="text" th:field="*{username}" class="form-control" placeholder="Username"
+                                   required/>
                         </div>
                         <div class="form-group">
                             <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required/>
                         </div>
                         <div class="form-group">
-                            <input type="password" th:field="*{password}" class="form-control" placeholder="Password" required/>
+                            <input type="password" th:field="*{password}" class="form-control" placeholder="Password"
+                                   required/>
                         </div>
                         <label>Roles:</label>
                         <select th:field="*{roleNames}" class="form-control" multiple>
-                            <option th:each="role : ${allRoles}" th:value="${role.name}" th:text="${role.name}"></option>
+                            <option th:each="role : ${allRoles}" th:value="${role.name}"
+                                    th:text="${role.name}"></option>
                         </select>
                         <button type="submit" class="btn btn-primary mt-2">Add User</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-</div>
     </div>
 </div>
 
