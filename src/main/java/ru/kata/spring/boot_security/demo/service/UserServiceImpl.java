@@ -83,12 +83,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(Long id, String name, String email, String password) {
+    public void updateUser(Long id, String name, String email, String password, Set<Role> roles) {
         User user = findUserById(id);
         if (user != null) {
             user.setUsername(name);
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
+            user.setRoles(roles);
             userDao.updateUser(user);
         }
     }

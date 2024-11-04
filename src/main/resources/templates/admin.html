@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
@@ -185,6 +185,16 @@
                     <label>Password</label>
                     <input type="password" class="form-control" name="password"/>
                 </div>
+                <div class="form-group">
+                    <label for="edit-role" class="form-label mb-0 pb-0">Role</label>
+                    <select class="form-control" multiple size="2"
+                            id="edit-role" name="roleNames">
+                        <option th:each="role : ${allRoles}"
+                                th:value="${role.name}"
+                                th:text="${#strings.substring(role.getAuthority(), 5)}">
+                        </option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Save changes</button>
                 <a href="#" class="btn btn-secondary">Close</a>
             </form>
@@ -195,6 +205,29 @@
         <div class="modal-content">
             <h5>Delete User</h5>
             <p>Are you sure you want to delete this user?</p>
+            <!-- Неизменяемые поля с информацией о пользователе -->
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" class="form-control" th:value="${user.id}" readonly/>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" th:value="${user.username}" readonly/>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" class="form-control" th:value="${user.email}" readonly/>
+            </div>
+            <div class="form-group">
+                <label for="role" class="form-label mb-0 pb-0">Role</label>
+                <select class="form-control" size="2" id="role" disabled>
+                    <option th:each="role : ${user.roles}"
+                            th:value="${role.getId()}"
+                            th:text="${#strings.substring(role.getAuthority(), 5)}">
+                    </option>
+                </select>
+            </div>
+
             <form action="/admin/delete" method="post">
                 <input type="hidden" name="id" th:value="${user.id}"/>
                 <button type="submit" class="btn btn-danger">Delete</button>

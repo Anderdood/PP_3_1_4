@@ -24,7 +24,7 @@ public interface UserService extends UserDetailsService {
 
     void saveUser(String name, String email, String password, Set<Role> roles);
 
-    void updateUser(Long id, String name, String email, String password);
+    void updateUser(Long id, String name, String email, String password, Set<Role> roles);
 
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;

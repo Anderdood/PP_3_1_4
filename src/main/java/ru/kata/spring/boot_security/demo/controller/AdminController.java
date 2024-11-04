@@ -39,25 +39,18 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(@ModelAttribute("user") User user) {
-        Set<Role> roles = new HashSet<>();
-        if (user.getRoleNames() != null) {
-            for (String roleName : user.getRoleNames()) {
-                Role role = roleRepository.findRoleByName(roleName);
-                if (role != null) {
-                    roles.add(role);
-                }
-            }
-        }
-        user.setRoles(roles);
-        userService.saveUser(user.getUsername(), user.getEmail(), user.getPassword(), roles);
+        assignRolesToUser(user);
+        userService.saveUser(user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles());
         return "redirect:/admin";
     }
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User user) {
-        userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
+        assignRolesToUser(user);
+        userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles());
         return "redirect:/admin";
     }
+
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam Long id) {
@@ -78,12 +71,25 @@ public class AdminController {
         return "admin";
     }
 
-    // Метод для проверки наличия роли
+    // Метод для проверки наличия роли(не актуален, но на будущее)
     public boolean hasRole(User user, String roleName) {
         return user.getRoles().stream()
                 .anyMatch(role -> role.getAuthority().equals(roleName));
     }
 
+    //метод для назначения ролей пользователю
+    private void assignRolesToUser(User user) {
+        Set<Role> roles = new HashSet<>();
+        if (user.getRoleNames() != null) {
+            for (String roleName : user.getRoleNames()) {
+                Role role = roleRepository.findRoleByName(roleName);
+                if (role != null) {
+                    roles.add(role);
+                }
+            }
+        }
+        user.setRoles(roles);
+    }
 
 }
 
