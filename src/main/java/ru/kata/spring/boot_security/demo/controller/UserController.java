@@ -27,9 +27,4 @@ public class UserController {
         return "user";
     }
 
-    // Метод для проверки наличия роли
-    public boolean hasRole(User user, String roleName) {
-        return user.getRoles().stream()
-                .anyMatch(role -> role.getAuthority().equals(roleName));
-    }
 }

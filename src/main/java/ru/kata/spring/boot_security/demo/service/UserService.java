@@ -20,11 +20,11 @@ public interface UserService extends UserDetailsService {
 
     public void deleteUser(Long id);
 
-    void saveUser(String name, String email, String password);
-
     void saveUser(String name, String email, String password, Set<Role> roles);
 
-    void updateUser(Long id, String name, String email, String password, Set<Role> roles);
+    void saveUser(String name, String email, String password, List<String> roles);
+
+    void updateUser(Long id, String name, String email, String password, List<String> roles);
 
     @Override
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;

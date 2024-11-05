@@ -32,12 +32,12 @@
             <div class="col-md-3">
                 <h2>Navigation</h2>
                 <ul class="list-group">
-                    <!-- Проверка на наличие роли "ADMIN" -->
-                    <li class="list-group-item" th:if="${@userController.hasRole(currentUser, 'ROLE_ADMIN')}">
+                    <li class="list-group-item" th:each="role : ${currentUser.getAuthorities()}"
+                        th:if="${role.authority == 'ROLE_ADMIN'}">
                         <a href="http://localhost:8080/admin">Admin Page</a>
                     </li>
-                    <!-- Проверка на наличие роли "USER" -->
-                    <li class="list-group-item" th:if="${@userController.hasRole(currentUser, 'ROLE_USER')}">
+                    <li class="list-group-item" th:each="role : ${currentUser.getAuthorities()}"
+                        th:if="${role.authority == 'ROLE_ADMIN'}">
                         <a href="http://localhost:8080/user">User Page</a>
                     </li>
                 </ul>

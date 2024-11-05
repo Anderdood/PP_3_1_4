@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public void saveUser(String name, String email, String password) {
+    public void saveUser(String name, String email, String password, List<String> rolesName) {
         User user = new User();
         user.setUsername(name);
         user.setEmail(email);
@@ -77,21 +77,35 @@ public class UserServiceImpl implements UserService {
         if (name.equals("admin")) {
             roles.add(roleRepository.findRoleByName("ROLE_ADMIN"));
         }
-        user.setRoles(roles);
+        user.setRoles(assignRolesToUser(rolesName));
         userDao.saveUser(user);
     }
 
     @Override
     @Transactional
-    public void updateUser(Long id, String name, String email, String password, Set<Role> roles) {
+    public void updateUser(Long id, String name, String email, String password, List<String> rolesName) {
         User user = findUserById(id);
         if (user != null) {
             user.setUsername(name);
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
-            user.setRoles(roles);
+            user.setRoles(assignRolesToUser(rolesName));
             userDao.updateUser(user);
         }
+    }
+
+    //метод для назначения ролей пользователю
+    private Set<Role> assignRolesToUser(List<String> rolesName) {
+        Set<Role> roles = new HashSet<>();
+        if (rolesName != null) {
+            for (String roleName : rolesName) {
+                Role role = roleRepository.findRoleByName(roleName);
+                if (role != null) {
+                    roles.add(role);
+                }
+            }
+        }
+        return roles;
     }
 
     @Override
