@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
 
@@ -24,7 +25,8 @@ public class RoleDaoImpl implements RoleDao {
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
-            return null;
+            LoggerFactory.getLogger(UserDaoImpl.class).warn("Пользователь с именем '{}' не найден.", name);
+            return null;// используется для проверки, что такой роли ещё нет
         }
     }
 

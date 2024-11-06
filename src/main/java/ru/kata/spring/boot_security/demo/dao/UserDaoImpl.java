@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -45,7 +46,8 @@ public class UserDaoImpl implements UserDao {
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException e) {
-            return null;
+            LoggerFactory.getLogger(UserDaoImpl.class).warn("Пользователь с именем '{}' не найден.", username);
+            return null; // используется для проверки, что такого пользователя ещё нет
         }
     }
 

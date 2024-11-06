@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String userHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String showUserHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User currentUser = userService.findUserByName(userDetails.getUsername());
         model.addAttribute("currentUser", currentUser);
         return "user";

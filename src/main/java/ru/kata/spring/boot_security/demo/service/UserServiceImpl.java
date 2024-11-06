@@ -73,10 +73,6 @@ public class UserServiceImpl implements UserService {
         user.setUsername(name);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        Set<Role> roles=new HashSet<>();
-        if (name.equals("admin")) {
-            roles.add(roleRepository.findRoleByName("ROLE_ADMIN"));
-        }
         user.setRoles(assignRolesToUser(rolesName));
         userDao.saveUser(user);
     }
