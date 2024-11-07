@@ -19,56 +19,18 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
-    private final RoleDao roleRepository;
 
     @Autowired
-    public AdminController(UserService userService, RoleDao roleRepository) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping()
     public String listUsers(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         User currentUser = userService.findUserByName(userDetails.getUsername());
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", userService.getAllRoles());
         return "admin";
     }
-
-    @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user.getUsername(), user.getEmail(), user.getPassword(), user.getRoleNames());
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userService.updateUser(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRoleNames());
-        return "redirect:/admin";
-    }
-
-
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam Long id) {
-        userService.deleteUser(id);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/find")
-    public String findUserById(@RequestParam Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User currentUser = userService.findUserByName(userDetails.getUsername());
-        model.addAttribute("currentUser", currentUser); //для отображения информации в шапке
-        User user = userService.findUserById(id);
-        model.addAttribute("users", userService.getAllUsers());// надо чтобы список отображался и дальше
-        // (можно и без users если нам нужен только конкретный юзер)
-        model.addAttribute("foundUser", user);
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", userService.getAllRoles());// нужно для отображения списка ролей при добавлении пользователя
-        return "admin";
-    }
-
 
 
 
